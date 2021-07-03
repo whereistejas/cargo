@@ -1920,7 +1920,7 @@ struct TomlTarget {
     crate_type: Option<Vec<String>>,
     #[serde(rename = "crate_type")]
     crate_type2: Option<Vec<String>>,
-
+    filename: Option<String>,
     path: Option<PathValue>,
     test: Option<bool>,
     doctest: Option<bool>,
@@ -1978,9 +1978,12 @@ impl TomlTarget {
     }
 
     fn name(&self) -> String {
-        match self.name {
-            Some(ref name) => name.clone(),
-            None => panic!("target name is required"),
+        match self.filename {
+            Some(ref filename) => filename.clone(),
+            _ => match self.name {
+                Some(ref name) => name.clone(),
+                None => panic!("target name is required"),
+            },
         }
     }
 
